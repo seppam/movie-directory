@@ -35,18 +35,13 @@ const Home = ({ onNavigate }) => {
           max-width: 1100px;
           margin: 0 auto;
         }
-        @media (max-width: 1100px) {
-          .movie-grid { grid-template-columns: repeat(5, 1fr); }
-        }
         @media (max-width: 900px) {
           .movie-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 560px) {
           .movie-grid { grid-template-columns: repeat(2, 1fr); }
         }
-        .movie-grid > * {
-          min-width: 0;
-        }
+        .movie-grid > * { min-width: 0; }
       `}</style>
 
       <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>
