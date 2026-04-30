@@ -24,16 +24,47 @@ const saveFavoritesToStorage = (favorites) => {
   }
 };
 
-export const fetchMovies = (searchQuery = 'avengers') => {
+// Fetch movies for a single page
+export const fetchMoviesPage = (searchQuery, page) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`https://www.omdbapi.com/?s=${searchQuery}&apikey=dbd0a3df`);
+      const response = await fetch(
+        `https://www.omdbapi.com/?s=${searchQuery}&page=${page}&apikey=dbd0a3df`
+      );
       const data = await response.json();
       if (data.Search) {
-        dispatch({ type: FETCH_MOVIES_SUCCESS, payload: data.Search });
+        dispatch({ type: FETCH_MOVIES_SUCCESS, payload: data.Search, meta: { page } });
       }
     } catch (error) {
-      console.error('Waduh, gagal ambil film:', error);
+      console.error('Gagal ambil film:', error);
+    }
+  };
+};
+
+// Fetch all pages 1..5 for "latest movies" query
+export const fetchMovies = (searchQuery = '2024') => {
+  return async (dispatch) => {
+    try {
+      const allMovies = [];
+      const MAX_PAGES = 5;
+
+      for (let page = 1; page <= MAX_PAGES; page++) {
+        const response = await fetch(
+          `https://www.omdbapi.com/?s=${searchQuery}&type=movie&page=${page}&apikey=dbd0a3df`
+        );
+        const data = await response.json();
+        if (data.Search && data.Search.length > 0) {
+          allMovies.push(...data.Search);
+        } else {
+          break; // no more results for this query
+        }
+      }
+
+      if (allMovies.length > 0) {
+        dispatch({ type: FETCH_MOVIES_SUCCESS, payload: allMovies });
+      }
+    } catch (error) {
+      console.error('Gagal ambil film:', error);
     }
   };
 };
@@ -67,7 +98,7 @@ export const removeFavorite = (imdbID) => {
     const updated = getState().favorites.filter((f) => f.imdbID !== imdbID);
     saveFavoritesToStorage(updated);
     dispatch({ type: REMOVE_FAVORITE, payload: imdbID });
-  }
+  };
 };
 
 export const toggleFavorite = (movie) => {
