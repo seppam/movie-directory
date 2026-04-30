@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+# 🎬 MovieMania — Movie Directory App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A lightweight, no-auth movie browsing app that lets you search for films, view details, and save favorites — all without signing in. Built with React and powered by the OMDb API.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+### Browse Films
+- Home page displays a default catalog of films (default search: "avengers")
+- Cards show poster, title, and year with smooth hover effects
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Search
+- Real-time search powered by OMDb API
+- Type any title and hit **Cari** (Search) to see results
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Film Details
+- Full details page: title, year, genre, rating, runtime, country, actors, writer, and plot synopsis
+- Back button returns to the previous page
 
-### `npm test`
+### Favorites (No Sign-In Required)
+- Click the heart button (❤️) on any movie card to add/remove from favorites
+- Click the favorite button on the detail page to toggle
+- Favorites persist across sessions via `localStorage` — no account needed
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Pages
+| Page | Route | Description |
+|------|-------|-------------|
+| Home | `/` | Film catalog grid |
+| Search | `/search` | Search any movie title |
+| Favorites | `/favorites` | Your saved films |
+| Detail | `/detail` | Full movie info |
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Layer | Technology |
+|-------|-----------|
+| UI Framework | React 19 (Create React App) |
+| State Management | Redux Toolkit |
+| HTTP Client | Fetch API (native) |
+| API | [OMDb API](https://www.omdbapi.com/) (`apikey=dbd0a3df`) |
+| Persistence | `localStorage` (favorites) |
+| Styling | Inline JS styles (flexbox-based) |
+| Build | `react-scripts` (CRA) |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Architecture
 
-### `npm run eject`
+```
+src/
+├── components/
+│   └── MovieCard.js       # Card with poster, info, heart button
+├── pages/
+│   ├── Home.js            # Film catalog grid
+│   ├── Search.js          # Search form + results
+│   ├── Favorites.js       # Persisted favorites list
+│   └── Detail.js         # Full movie details
+├── store/
+│   ├── index.js           # Redux store
+│   ├── actions/
+│   │   └── movieActions.js  # Thunk actions (fetch, add/remove/toggle favorites)
+│   └── reducers/
+│       └── movieReducer.js   # allMovies, selectedMovie, favorites
+├── App.js                 # Page routing via useState
+└── index.js              # React DOM + Redux Provider entry point
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### State Shape
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+{
+  allMovies: [],      // Array of movie objects from search results
+  selectedMovie: null, // Full movie detail object
+  favorites: []      // Movie objects persisted in localStorage
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Key Actions
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| Action | Thunk | Description |
+|--------|-------|-------------|
+| `FETCH_MOVIES_SUCCESS` | `fetchMovies(query)` | Search OMDb and store results |
+| `FETCH_DETAIL_SUCCESS` | `fetchMovieDetail(id)` | Fetch full detail by IMDb ID |
+| `ADD_FAVORITE` | `addFavorite(movie)` | Add movie to favorites |
+| `REMOVE_FAVORITE` | `removeFavorite(imdbID)` | Remove movie from favorites |
+| `TOGGLE_FAVORITE` | `toggleFavorite(movie)` | Toggle add/remove (used in UI) |
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🚀 Getting Started
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# 1. Install dependencies
+npm install
 
-### Code Splitting
+# 2. Start development server
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# 3. Build for production
+npm run build
+```
 
-### Analyzing the Bundle Size
+> Development server runs at [http://localhost:3000](http://localhost:3000)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 📁 Project Info
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **Initial commit:** 2026-04-30
+- **Build status:** ✅ Compiles successfully
+- **No external auth required** — favorites stored in browser localStorage
+- **API:** OMDb (free tier, demo key included)
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 🌐 Environment
 
-### Deployment
+This project was set up and developed using **Antigravity** (VS Code-based IDE on macOS), a development environment configured with:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Extensions: React Developer Tools, Tailwind CSS, PHP Tools, Python, Jupyter, Dart/Flutter, Go, Java, Ruby, MongoDB, Docker, and more
