@@ -49,7 +49,6 @@ const MovieCard = ({ movie, onNavigate }) => {
 };
 
 const cardStyle = {
-  width: '200px',
   border: '1px solid #ddd',
   borderRadius: '12px',
   overflow: 'hidden',
@@ -57,20 +56,21 @@ const cardStyle = {
   display: 'flex',
   flexDirection: 'column',
   boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-  margin: '10px',
+  transition: 'transform 0.2s, box-shadow 0.2s',
+  cursor: 'pointer',
 };
 
 const imageStyle = {
   width: '100%',
   height: '280px',
   objectFit: 'cover',
+  display: 'block',
 };
 
 const infoStyle = {
   padding: '10px',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-between',
   flexGrow: 1,
 };
 
@@ -90,6 +90,8 @@ const buttonStyle = {
   borderRadius: '5px',
   cursor: 'pointer',
   marginTop: '5px',
+  width: '100%',
+  boxSizing: 'border-box',
 };
 const heartBtnStyle = {
   position: 'absolute',

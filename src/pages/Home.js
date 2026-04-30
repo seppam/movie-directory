@@ -4,7 +4,6 @@ import { fetchMovies } from '../store/actions/movieActions';
 import MovieCard from '../components/MovieCard';
 
 const ITEMS_PER_PAGE = 10;
-const TOTAL_PAGES = 5;
 
 const Home = ({ onNavigate }) => {
   const dispatch = useDispatch();
@@ -17,7 +16,7 @@ const Home = ({ onNavigate }) => {
     }
   }, [dispatch, movies.length]);
 
-  const totalPages = Math.min(TOTAL_PAGES, Math.ceil(movies.length / ITEMS_PER_PAGE));
+  const totalPages = Math.ceil(movies.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentMovies = movies.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
@@ -28,15 +27,33 @@ const Home = ({ onNavigate }) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2 style={{ textAlign: 'center' }}>🎬 Katalog Film Terbaru</h2>
+      <style>{`
+        .movie-grid {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 16px;
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+        @media (max-width: 1100px) {
+          .movie-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        @media (max-width: 900px) {
+          .movie-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 560px) {
+          .movie-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        .movie-grid > * {
+          min-width: 0;
+        }
+      `}</style>
 
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}
-      >
+      <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>
+        🎬 Katalog Film Terbaru
+      </h2>
+
+      <div className="movie-grid">
         {currentMovies.map((item) => (
           <MovieCard
             key={`${item.imdbID}-${currentPage}`}
@@ -48,7 +65,7 @@ const Home = ({ onNavigate }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div style={paginationStyle}>
+        <div style={paginationWrapperStyle}>
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -80,7 +97,7 @@ const Home = ({ onNavigate }) => {
   );
 };
 
-const paginationStyle = {
+const paginationWrapperStyle = {
   display: 'flex',
   justifyContent: 'center',
   gap: '8px',
